@@ -1,53 +1,140 @@
-
 public class BowlingGame {
 
-    int tour[][];
-    int nbQuilles = 0;
-    int lanceUn = 0;
-    int lanceDeux = 0;
-    int indexTour;
-    int indexLance = 1;
-    int lanceBonus;
-    int score = 0;
+		private int score;
 
-    // methode pour r�cup�rer le score.
-    public int scoreAdd() {
-	score = score + tour[indexTour][indexLance] + tour[indexTour][indexLance++]; // Valeur que l'on va ajouter à
-										     // chaque tour.
-	return score;
-    }
-
-    // R�cup�rer les bons bonus
-    public int bonusQuilles() {
-
-	for (indexTour = 1; indexTour <= 10; indexTour++) {
-
-	    if (nbQuilles == 10) {
-		// SPARE
-		if (tour[indexTour][indexLance] + tour[indexTour][indexLance++] == 10) { // lancé 1 et lancé 2 de
-											 // l'index courant == 10
-		    indexTour++; // on incr�mente pour passer au tour suivant et recuperer la valeur du premier
-				 // lanc�
-		    lanceBonus = tour[indexTour][indexLance]; // premier lance du tour suivant
-		} else if (tour[indexTour][indexLance] == 10) {
-		    // STRIKE
-		    // tour[indexTour][indexLance++] = int.parseInt(toString( ));
-		    tour[indexTour][indexLance++] = 0;
-		    // essai de conversion de la valeur int en string pour n'avoir rien à afficher
-		    indexTour++;
-		    lanceBonus = tour[indexTour][indexLance] + tour[indexTour][indexLance++];
-		} else {
-		    lanceBonus = 0;
+		public int getScore() {
+			return score;
 		}
-		// soit strike soit spare
-	    }
+
+		public void setScore(int score) {
+			this.score = score;
+		}
+
+
+		private int quelLancer = 1;
+
+		public int getQuelLancer() {
+			return quelLancer;
+		}
+
+		public void setQuelLancer(int quelLancer) {
+			this.quelLancer = quelLancer;
+		}
+
+
+		private int premierStrike = 0;
+
+		public int getPremierStrike() {
+			return premierStrike;
+		}
+
+		public void setPremierStrike(int premierStrike) {
+			this.premierStrike = premierStrike;
+		}
+
+
+		private int deuxiemeStrike = 0;
+
+		public int getDeuxiemeStrike() {
+			return deuxiemeStrike;
+		}
+
+		public void setDeuxiemeStrike(int deuxiemeStrike) {
+			this.deuxiemeStrike = deuxiemeStrike;
+		}
+
+
+		private int lancer1 = 0;
+
+		public int getLancer1() {
+			return lancer1;
+		}
+
+		public void setLancer1(int lancer1) {
+			this.lancer1 = lancer1;
+		}
+
+
+		private int lancer2 = 0;
+
+		public int getLancer2() {
+			return lancer2;
+		}
+
+		public void setLancer2(int lancer2) {
+			this.lancer2 = lancer2;
+		}
+
+
+		private int lancer3 = 0;
+
+		public int getLancer3(){ return lancer3; }
+
+		public void setLancer3(int lancer3){
+			this.lancer3 = lancer3;
+		}
+
+			private int lancer4 = 0;
+
+		public int getLancer4(){
+			return  lancer4;
+		}
+
+		public void setLancer4(int lancer4){
+			this.lancer4 = lancer4;
+		}
+
+		private int nbQuilles;
+
+
+
+	private boolean isStrike1 = false;
+	//si true premierStrike = nbQuilles;
+	private boolean isStrike2 = false;
+	//si true deuxiemeStrike = nbQuilles
+
+
+	public void roll(int nbQuilles) {
+		//premier Strike
+		if (getQuelLancer() % 2 == 1) { // Si premier lancer
+			if (getQuelLancer() == 10 && isStrike1 == false) { //Premier lancer vaut 10 et pas eu de strike avant
+				isStrike1 = true;
+				setPremierStrike(nbQuilles); // On sauvegarde le strike
+				// Comme strike, on ne fait pas le 2e lancer
+				// on veut les deux lancers du tour suivant
+				setLancer3(getQuelLancer() + 2);
+				setLancer4(getQuelLancer() + 3);
+
+				 //setScore(getScore() + getPremierStrike() + getLancer3() + getLancer4());
+				score += getPremierStrike() + getLancer3() + getLancer4();
+				//deux strikes de suite
+			} else if (getQuelLancer() == 10 && isStrike1 == true) {
+				isStrike2 = true;
+				setDeuxiemeStrike(nbQuilles); // On stocke le 2e strike.
+				//score = setScore(getScore() + (nbQuilles * 2));
+				//on a 3 strikes de suite
+			} else if (getQuelLancer() == 10 && isStrike2 == true) {
+				 setScore(getScore() + (nbQuilles * 3));
+				//Spare
+			} else if ((getQuelLancer() < 10) && ((getQuelLancer() + (getQuelLancer() + 1)) == 10)) {
+				setLancer1(getQuelLancer()); // On sauvegarde les lancers du spare
+				setLancer2(getQuelLancer() + 1);
+				setLancer3(getQuelLancer() + 2);
+				setLancer4(getQuelLancer() + 3);
+				//setQuelLancer(getQuelLancer() + 2); // on incremente le compteur de lancer pour récuperer le lancer suivant le strike
+
+				setScore(getScore() + getLancer1() + getLancer2() + getLancer3());
+			}
+		}else {
+			//ni strike, ni spare
+				setScore(getScore() + getLancer1() + getLancer2());
+
+		}
 	}
-	return lanceBonus;
-    }
+
 }
-/*
- * 10 quilles par tour, 2 lancés par tour si lancé 1 == 10, strike donc bonus
- * strike si lancé 1 + lancé 2 == 10, spare donc bonus spare si lancé 1 +
- * lancé 2 < 10, pas bonus si tour 10 et strike, 2 lancés suppl si tour 10 et
- * spare, 1 lancé suppl
- */
+
+
+
+
+
